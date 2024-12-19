@@ -233,7 +233,7 @@ public class KafkaBenchmark implements Benchmark {
         String topicsJoin = FormatTool.join(",", topics);
         log("Deleting topic(s): %s...", topicsJoin);
         try {
-            DeleteTopicsResult result = adminClient.deleteTopics(topics);
+            DeleteTopicsResult result = adminClient.deleteTopics(topics, new DeleteTopicsOptions().timeoutMs(60000));
             result.all().get();
             if (wait && config.waitAfterDeleteTopic > 0) {
                 sleep(config.waitAfterDeleteTopic, "waiting after topic deletion");
@@ -246,6 +246,8 @@ public class KafkaBenchmark implements Benchmark {
                 log("Cannot delete topic(s): %s - %s", topicsJoin, e);
             } else if (e.getCause() instanceof UnknownTopicOrPartitionException) {
                 log("Cannot delete topic(s): %s - %s", topicsJoin, e.getCause());
+            } else if (e instanceof TimeoutException) {
+                log("Timeout while deleting topic(s): %s - %s", topicsJoin, e);
             } else {
                 throw new KafkaRuntimeException("Failed to delete topic(s): " + topicsJoin, e);
             }
