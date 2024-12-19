@@ -48,7 +48,7 @@ public class KafkaBenchmarkConfig extends BenchmarkConfig {
     public static final String TIME_MSGS_UNITS = "ms";
 
     public KafkaThrottleMode throttleMode;  // use throttling method for reaching target rate  
-    public String brokerList = "localhost:9092"; // list of Kafka brokers
+    public String brokerList = "192.168.6.122:9092"; // list of Kafka brokers
     public String topic = "test";           // Kafka topic used for testing
     public boolean probeTopics = false;     // perform message probe
     public int messageLength = 1024;        // minimum size of a message in bytes
